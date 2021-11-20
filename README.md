@@ -2,7 +2,7 @@
 - [Stream deck print](https://www.thingiverse.com/thing:2822140)
 - Sparkfun Pro Micro board ([Sparkfun](https://www.sparkfun.com/products/12640), [Amazon (clone)](https://www.amazon.com/gp/product/B08BJNV1J3))
 - Gateron switches ([Amazon](https://www.amazon.com/gp/product/B08JP8ZBKJ))
-- Relegendable Keycaps ([Amazon](https://www.amazon.com/X-keys-Keycap-Cherry-Compatible-Transparent/dp/B00FYO8EDC), [Thingiverse](https://www.thingiverse.com/thing:3791028))
+- Relegendable keycaps ([Amazon](https://www.amazon.com/X-keys-Keycap-Cherry-Compatible-Transparent/dp/B00FYO8EDC), [Thingiverse](https://www.thingiverse.com/thing:3791028))
 - microSD card reader ([Adafruit](https://www.adafruit.com/product/254), [Amazon](https://www.amazon.com/gp/product/B07BJ2P6X6))
 
 ![keyboard](https://user-images.githubusercontent.com/8365885/142738102-05f94c7d-b109-4187-99c4-2cb9c0f05725.png)
