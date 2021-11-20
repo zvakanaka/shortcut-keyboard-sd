@@ -11,6 +11,8 @@
 ## Instructions
 Place files `1.txt`, `2.txt`, etc. on the root of the microSD card. Pressing the corresponding key will execute the script. See [Duckduino-microSD](https://github.com/Seytonic/Duckduino-microSD) for limitations.
 
+> Note: If you open a script in Notepad.exe, you'll notice everything is all nasty and on one [line](https://www.cs.toronto.edu/~krueger/csc209h/tut/line-endings.html). Use an IDE to edit the scripts if you are on Windows. 
+
 ## Printable Template
 https://docs.google.com/document/d/1bIXJqAgq2c0NdrM7F2UUlvPY7I8CWgMdOjNfr_esz3Y
 
