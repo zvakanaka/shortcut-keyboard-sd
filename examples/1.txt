@@ -1,0 +1,7 @@
+REM Linux - Open documentation website
+REM top left button on 8-key stream deck
+ALT F2
+DELAY 500
+STRING xdg-open https://github.com/zvakanaka/goodUSB-shortcut-keyboard
+DELAY 300
+ENTER

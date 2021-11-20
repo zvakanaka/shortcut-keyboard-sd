@@ -1,0 +1,2 @@
+REM go to beginning
+SHIFT F12

@@ -1,0 +1,7 @@
+REM Windows - open documentation URL
+DELAY 300
+GUI r
+DELAY 300
+STRING https://github.com/zvakanaka/goodUSB-shortcut-keyboard
+DELAY 300
+ENTER

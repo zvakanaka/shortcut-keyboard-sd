@@ -2,11 +2,13 @@
  * Original author of Duckduino: Seytonic
  *        https://twitter.com/seytonic
  *        https://www.youtube.com/seytonic
- * GIT:
  *        https://github.com/Seytonic/Duckduino-microSD
  * 
  * DuckyScript documentation:
  *        https://docs.hak5.org/hc/en-us/articles/360047381354-QUACK-and-Ducky-Script-2-0
+ * 
+ * Pro Micro pinout:
+ *        https://learn.sparkfun.com/tutorials/pro-micro--fio-v3-hookup-guide/all#hardware-overview-pro-micro
  */
 
 #include <Arduino.h>
@@ -16,6 +18,7 @@
 #include "Keyboard.h"
 
 #define NUM_KEYS 8
+// #define WAIT_FOR_SERIAL
 
 File fileHandler;
 
@@ -29,16 +32,18 @@ File fileHandler;
   D4  -> CS
 */
 
-#define KEY1 2
-#define KEY2 3
+// 2 and 3 are reserved for i2c, but would work for buttons if needed
+#define KEY1 18
+#define KEY2 19
 #define KEY3 5
 #define KEY4 6
 #define KEY5 7
 #define KEY6 8
 #define KEY7 9
 #define KEY8 10
-// #define KEY9 16 // CANNOT USE (SD uses it)
-// #define KEY10 4 // CANNOT USE (SD uses it)
+// NOTE: only available if NUM_KEYS is 10
+#define KEY9 20
+#define KEY10 21
 
 #define KEY_DELAY 200
 
@@ -48,9 +53,12 @@ void Press(String b);
 
 void setup() {
   Serial.begin(9600);
+  delay(200);
+  #ifdef WAIT_FOR_SERIAL
   while (!Serial) {
-    ; // wait for serial port to connect. Needed for native USB
+    ; // wait for serial port to connect
   }
+  #endif
   Serial.println("STARTUP");
 
   pinMode(KEY1, INPUT_PULLUP);
@@ -62,8 +70,8 @@ void setup() {
   pinMode(KEY7, INPUT_PULLUP);
   pinMode(KEY8, INPUT_PULLUP);
   if (NUM_KEYS == 10) {
-  // pinMode(KEY9, INPUT_PULLUP);
-  // pinMode(KEY10, INPUT_PULLUP);
+    pinMode(KEY9, INPUT_PULLUP);
+    pinMode(KEY10, INPUT_PULLUP);
   }
 
   if (!SD.begin(4)) {
@@ -225,7 +233,7 @@ void loop() {
   checkKey(KEY7, 7);
   checkKey(KEY8, 8);
   if (NUM_KEYS == 10) {
-    // checkKey(KEY9, 9);
-    // checkKey(KEY10, 10);
+    checkKey(KEY9, 9);
+    checkKey(KEY10, 10);
   }
 }

@@ -1,0 +1,2 @@
+REM play from the pattern cursor
+SHIFT F10

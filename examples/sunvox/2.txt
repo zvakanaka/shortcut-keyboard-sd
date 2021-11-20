@@ -1,0 +1,2 @@
+REM play from beginning
+F10

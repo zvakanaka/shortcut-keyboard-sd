@@ -1,0 +1,8 @@
+REM Zoom toggle mute
+REM https://support.zoom.us/hc/en-us/articles/205683899-Hot-keys-and-keyboard-shortcuts
+
+REM Windows/Linux
+ALT a
+
+REM Mac
+REM GUI SHIFT a

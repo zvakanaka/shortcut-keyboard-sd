@@ -1,0 +1,6 @@
+REM top right button on 8-key stream deck
+ALT F2
+DELAY 300
+STRING xdg-open https://comeuntochrist.org
+DELAY 300
+ENTER

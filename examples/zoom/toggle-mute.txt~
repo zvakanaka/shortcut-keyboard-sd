@@ -1,0 +1,7 @@
+REM Zoom toggle mute
+
+REM Windows/Linux
+ALT a
+
+REM Mac
+REM GUI SHIFT a

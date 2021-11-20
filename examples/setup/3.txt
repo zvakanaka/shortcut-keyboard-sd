@@ -1,0 +1,6 @@
+REM Mac - open documentation URL
+GUI SPACE
+DELAY 750
+STRING https://github.com/zvakanaka/goodUSB-shortcut-keyboard
+DELAY 1000
+ENTER

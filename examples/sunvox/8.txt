@@ -1,0 +1,2 @@
+REM i is for c5
+STRING i
