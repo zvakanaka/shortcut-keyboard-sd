@@ -3,10 +3,10 @@
  *        https://twitter.com/seytonic
  *        https://www.youtube.com/seytonic
  *        https://github.com/Seytonic/Duckduino-microSD
- * 
+ *
  * DuckyScript documentation:
  *        https://docs.hak5.org/hc/en-us/articles/360047381354-QUACK-and-Ducky-Script-2-0
- * 
+ *
  * Pro Micro pinout:
  *        https://learn.sparkfun.com/tutorials/pro-micro--fio-v3-hookup-guide/all#hardware-overview-pro-micro
  */
@@ -15,12 +15,23 @@
 #include <SD.h>
 #include <SPI.h>
 #include <string.h>
-#include "Keyboard.h"
 
-#define NUM_KEYS 8
+#include "Keyboard.h"
+//#define SCREEN_KEY
+#ifdef SCREEN_KEY
+#include <U8x8lib.h>
+// NOTE: could not use U8g2lib due to RAM or SD Card (see
+// https://stackoverflow.com/questions/60257868/oled-i2c-and-micro-sd-card-module-not-working-together-in-arduino
+// and https://github.com/olikraus/u8g2/issues/792)
+U8X8_SSD1306_64X32_1F_HW_I2C u8x8(/* reset=*/U8X8_PIN_NONE);
+#endif
+
+#define DEBUG
 // #define WAIT_FOR_SERIAL
 
 File fileHandler;
+// sets keys to 1,2,3,4,5,6,7,8 if SD fails
+boolean factoryTestMode = false;  // NOTE: if SD fails, this is set to true
 
 /*
   SD board
@@ -33,17 +44,14 @@ File fileHandler;
 */
 
 // 2 and 3 are reserved for i2c, but would work for buttons if needed
-#define KEY1 18
-#define KEY2 19
-#define KEY3 5
-#define KEY4 6
-#define KEY5 7
-#define KEY6 8
-#define KEY7 9
-#define KEY8 10
-// NOTE: only available if NUM_KEYS is 10
-#define KEY9 20
-#define KEY10 21
+#define KEY1 18  // (A0)
+#define KEY2 19  // (A1)
+#define KEY3 5   // (5)
+#define KEY4 6   // (6)
+#define KEY5 7   // (7)
+#define KEY6 8   // 8
+#define KEY7 9   // 9
+#define KEY8 10  // 10
 
 #define KEY_DELAY 200
 
@@ -53,12 +61,15 @@ void Press(String b);
 
 void setup() {
   Serial.begin(9600);
+#ifdef SCREEN_KEY
+  u8x8.begin();
+#endif
   delay(200);
-  #ifdef WAIT_FOR_SERIAL
+#ifdef WAIT_FOR_SERIAL
   while (!Serial) {
-    ; // wait for serial port to connect
+    ;  // wait for serial port to connect
   }
-  #endif
+#endif
   Serial.println("STARTUP");
 
   pinMode(KEY1, INPUT_PULLUP);
@@ -69,32 +80,35 @@ void setup() {
   pinMode(KEY6, INPUT_PULLUP);
   pinMode(KEY7, INPUT_PULLUP);
   pinMode(KEY8, INPUT_PULLUP);
-  if (NUM_KEYS == 10) {
-    pinMode(KEY9, INPUT_PULLUP);
-    pinMode(KEY10, INPUT_PULLUP);
-  }
 
   if (!SD.begin(4)) {
     Serial.println("SD FAILURE");
-    return;
+    Serial.println("Falling back to factory test mode (1,2,3,4,5,6,7,8)");
+    factoryTestMode = true;
   }
 }
 
 void executeScript(String scriptFileName) {
   char buf[30];
   scriptFileName.toCharArray(buf, scriptFileName.length() + 1);
-  Serial.print("LOOKING FOR FILE ");
-  Serial.println(buf);
+  #ifdef DEBUG
+    Serial.print("LOOKING FOR FILE ");
+    Serial.println(buf);
+  #endif
   fileHandler = SD.open(buf);
   if (fileHandler) {
-    Serial.println("FOUND FILE " + scriptFileName);
+    #ifdef DEBUG
+      Serial.println("FOUND FILE " + scriptFileName);
+    #endif
     Keyboard.begin();
 
     String line = "";
     while (fileHandler.available()) {
       char m = fileHandler.read();
       if (m == '\n') {
-        Serial.println("   " + line);
+        #ifdef DEBUG
+          Serial.println("   " + line);
+        #endif
         Line(line);
         line = "";
       } else if ((int)m != 13) {
@@ -209,14 +223,27 @@ void Press(String b) {
   }
 }
 
-void checkKey(unsigned int key, unsigned int textFileNumber) {
+void checkKey(unsigned int key, unsigned int keyNumber) {
   if (digitalRead(key) == LOW) {
-    // Serial.print(key);
-    // Serial.println(" pressed");
-    String fileName = String(textFileNumber) + ".txt";
-    executeScript(fileName);
-  
-    delay(KEY_DELAY); // prevent double-press
+#ifdef SCREEN_KEY
+    u8x8.setFont(u8x8_font_chroma48medium8_r);
+    char text[1];
+    text[0] = keyNumber + '0';
+    text[1] = '\0';
+    u8x8.drawString(0, 1, text);
+#endif SCREEN_KEY
+#ifdef DEBUG
+    Serial.print(keyNumber);
+    Serial.println(" pressed");
+#endif
+    if (factoryTestMode) {
+      Keyboard.press(keyNumber + '0');
+    } else {
+      String fileName = String(keyNumber) + ".txt";
+      executeScript(fileName);
+    }
+
+    delay(KEY_DELAY);  // prevent double-press
   }
   if (digitalRead(key) == HIGH) {
     Keyboard.releaseAll();
@@ -232,8 +259,4 @@ void loop() {
   checkKey(KEY6, 6);
   checkKey(KEY7, 7);
   checkKey(KEY8, 8);
-  if (NUM_KEYS == 10) {
-    checkKey(KEY9, 9);
-    checkKey(KEY10, 10);
-  }
 }
