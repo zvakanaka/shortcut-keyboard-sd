@@ -12,19 +12,10 @@
  */
 
 #include <Arduino.h>
+#include <HID-Project.h>
 #include <SD.h>
 #include <SPI.h>
 #include <string.h>
-
-#include "Keyboard.h"
-//#define SCREEN_KEY
-#ifdef SCREEN_KEY
-#include <U8x8lib.h>
-// NOTE: could not use U8g2lib due to RAM or SD Card (see
-// https://stackoverflow.com/questions/60257868/oled-i2c-and-micro-sd-card-module-not-working-together-in-arduino
-// and https://github.com/olikraus/u8g2/issues/792)
-U8X8_SSD1306_64X32_1F_HW_I2C u8x8(/* reset=*/U8X8_PIN_NONE);
-#endif
 
 #define DEBUG
 // #define WAIT_FOR_SERIAL
@@ -53,7 +44,7 @@ boolean factoryTestMode = false;  // NOTE: if SD fails, this is set to true
 #define KEY7 9   // 9
 #define KEY8 10  // 10
 
-#define KEY_DELAY 200
+#define KEY_DELAY 150
 
 void executeScript(String scriptFileName);
 void Line(String l);
@@ -101,8 +92,10 @@ void executeScript(String scriptFileName) {
       Serial.println("FOUND FILE " + scriptFileName);
     #endif
     Keyboard.begin();
+    Consumer.begin(); // Initializes the media keyboard
 
     String line = "";
+
     while (fileHandler.available()) {
       char m = fileHandler.read();
       if (m == '\n') {
@@ -154,11 +147,34 @@ void Line(String l) {
   Keyboard.releaseAll();
 }
 
+// add support for keys from here as needed https://github.com/NicoHood/HID/blob/master/src/HID-APIs/ConsumerAPI.h
 void Press(String b) {
   if (b.length() == 1) {
     char c = b[0];
     Keyboard.press(c);
-  } else if (b.equals("ENTER")) {
+  } else if (b.equals("MEDIA_PAUSE")) {
+    Consumer.write(MEDIA_PAUSE);
+  } else if (b.equals("MEDIA_VOLUME_MUTE")) {
+    Consumer.write(MEDIA_VOLUME_MUTE);
+  } else if (b.equals("MEDIA_VOL_MUTE")) {
+    Consumer.write(MEDIA_VOL_MUTE);
+  } else if (b.equals("MEDIA_VOLUME_UP")) {
+    Consumer.write(MEDIA_VOLUME_UP);
+  } else if (b.equals("MEDIA_VOL_UP")) {
+    Consumer.write(MEDIA_VOL_UP);
+  } else if (b.equals("MEDIA_VOLUME_DOWN")) {
+    Consumer.write(MEDIA_VOLUME_DOWN);
+  } else if (b.equals("MEDIA_VOL_DOWN")) {
+    Consumer.write(MEDIA_VOL_DOWN);
+  } else if (b.equals("CONSUMER_BRIGHTNESS_UP")) {
+    Consumer.write(CONSUMER_BRIGHTNESS_UP);
+  } else if (b.equals("CONSUMER_BRIGHTNESS_DOWN")) {
+    Consumer.write(CONSUMER_BRIGHTNESS_DOWN);
+  } else if (b.equals("CONSUMER_SCREENSAVER")) {
+    Consumer.write(CONSUMER_SCREENSAVER);
+  } else if (b.equals("MEDIA_PLAY_PAUSE")) {
+    Consumer.write(MEDIA_PLAY_PAUSE);
+  }  else if (b.equals("ENTER")) {
     Keyboard.press(KEY_RETURN);
   } else if (b.equals("CTRL")) {
     Keyboard.press(KEY_LEFT_CTRL);
@@ -220,6 +236,14 @@ void Press(String b) {
     Keyboard.press(KEY_F12);
   } else if (b.equals("SPACE")) {
     Keyboard.press(' ');
+  } else if (b.startsWith("0x")) {  
+    // convert hex strings to integers (integers are the same as raw hex to HID-Project)
+    // possibilities:
+    //   https://github.com/NicoHood/HID/blob/master/src/KeyboardLayouts/ImprovedKeylayouts.h
+    //   https://github.com/NicoHood/HID/blob/master/src/HID-APIs/ConsumerAPI.h
+    //   http://www.freebsddiary.org/APC/usb_hid_usages.php
+    // https://github.com/NicoHood/HID/blob/4bf6cd6167b1152a292bbc62793a85ab69070895/examples/Keyboard/ImprovedKeyboard/ImprovedKeyboard.ino#L43
+    Keyboard.write(KeyboardKeycode((int)strtol(b.c_str(), 0, 16)));
   }
 }
 
