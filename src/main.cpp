@@ -52,9 +52,6 @@ void Press(String b);
 
 void setup() {
   Serial.begin(9600);
-#ifdef SCREEN_KEY
-  u8x8.begin();
-#endif
   delay(200);
 #ifdef WAIT_FOR_SERIAL
   while (!Serial) {
@@ -249,13 +246,6 @@ void Press(String b) {
 
 void checkKey(unsigned int key, unsigned int keyNumber) {
   if (digitalRead(key) == LOW) {
-#ifdef SCREEN_KEY
-    u8x8.setFont(u8x8_font_chroma48medium8_r);
-    char text[1];
-    text[0] = keyNumber + '0';
-    text[1] = '\0';
-    u8x8.drawString(0, 1, text);
-#endif SCREEN_KEY
 #ifdef DEBUG
     Serial.print(keyNumber);
     Serial.println(" pressed");
