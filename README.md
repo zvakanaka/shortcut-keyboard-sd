@@ -1,5 +1,5 @@
 # SD Card Shortcut Keyboard
-- [Stream deck print](https://www.thingiverse.com/thing:2822140)
+- [Stream deck print](https://www.thingiverse.com/thing:5237714)
 - Sparkfun Pro Micro board ([Sparkfun](https://www.sparkfun.com/products/12640), [Amazon (clone)](https://www.amazon.com/gp/product/B08BJNV1J3))
 - Gateron switches ([Amazon](https://www.amazon.com/gp/product/B08JP8ZBKJ))
 - Relegendable keycaps ([Amazon](https://www.amazon.com/X-keys-Keycap-Cherry-Compatible-Transparent/dp/B00FYO8EDC), [Thingiverse](https://www.thingiverse.com/thing:3791028))
