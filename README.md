@@ -10,6 +10,27 @@
 ![shortcut_keyboard](https://user-images.githubusercontent.com/8365885/154828694-d706b5c4-2969-453b-9fc2-412868c813c3.jpg)
 
 ![build](https://user-images.githubusercontent.com/8365885/210162516-476d40cf-f464-426e-a49f-1d3ea1a3b25f.png)
+  
+### SD Board Wiring 
+```
+  VCC -> VCC
+  D15 -> SCK
+  D14 -> MISO
+  D16 -> MOSI
+  GND -> GND
+  D4  -> CS
+```
+### Keys Wiring
+```
+A0 -> KEY1 (18)
+A1 -> KEY2 (19)
+5  -> KEY3 (5) 
+6  -> KEY4 (6) 
+7  -> KEY5 (7) 
+8  -> KEY6 (8) 
+9  -> KEY7 (9) 
+10 -> KEY8 (10)
+```
 
 ## Instructions
 Place files `1.txt`, `2.txt`, etc. on the root of the microSD card. Pressing the corresponding key will execute the [script](https://docs.hak5.org/hc/en-us/articles/360010555153-Ducky-Script-the-USB-Rubber-Ducky-language). See [Duckduino-microSD](https://github.com/Seytonic/Duckduino-microSD) for limitations (with the exception that this project adds support for `MEDIA_PLAY_PAUSE`, `MEDIA_VOLUME_UP`, `MEDIA_VOLUME_MUTE`, a few others, and [hex codes](http://www.freebsddiary.org/APC/usb_hid_usages.php) for just about any key you want).
