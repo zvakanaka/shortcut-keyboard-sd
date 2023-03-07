@@ -50,5 +50,5 @@ https://docs.google.com/document/d/1bIXJqAgq2c0NdrM7F2UUlvPY7I8CWgMdOjNfr_esz3Y
 
 ## Thanks!
 https://github.com/Seytonic/Duckduino-microSD  
-https://docs.hak5.org/hak5-usb-rubber-ducky/ducky-script-basics/keystroke-injection
+https://docs.hak5.org/hak5-usb-rubber-ducky/ducky-script-basics/keystroke-injection  
 https://www.thingiverse.com/thing:2822140
